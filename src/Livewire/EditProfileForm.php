@@ -1,6 +1,6 @@
 <?php
 
-namespace Joaopaulolndev\FilamentEditProfile\Livewire;
+namespace NoopStudios\FilamentEditProfile\Livewire;
 
 use Filament\Auth\Notifications\NoticeOfEmailChangeRequest;
 use Filament\Auth\Notifications\VerifyEmailChange;
@@ -16,7 +16,7 @@ use Filament\Support\Exceptions\Halt;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Notification;
-use Joaopaulolndev\FilamentEditProfile\Concerns\HasUser;
+use NoopStudios\FilamentEditProfile\Concerns\HasUser;
 use League\Uri\Components\Query;
 
 class EditProfileForm extends BaseProfileForm
@@ -115,7 +115,7 @@ class EditProfileForm extends BaseProfileForm
 
                 // Refresh the model to clear any potentially dirty email attribute,
                 // ensuring that only the fields in $data are persisted.
-                // @see https://github.com/joaopaulolndev/filament-edit-profile/issues/132
+                // @see https://github.com/noopstudios/filament-edit-profile/issues/132
                 $this->user->refresh();
             }
 

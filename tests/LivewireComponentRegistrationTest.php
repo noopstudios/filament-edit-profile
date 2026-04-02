@@ -3,7 +3,7 @@
 use Livewire\Livewire;
 
 /**
- * Regression test for https://github.com/joaopaulolndev/filament-edit-profile/issues/134
+ * Regression test for https://github.com/noopstudios/filament-edit-profile/issues/134
  *
  * Livewire components must be registered in the ServiceProvider (which runs on
  * every request), not in Plugin::boot() (which only runs when the Filament

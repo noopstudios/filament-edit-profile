@@ -1,6 +1,6 @@
 <?php
 
-namespace Joaopaulolndev\FilamentEditProfile\Pages;
+namespace NoopStudios\FilamentEditProfile\Pages;
 
 use Filament\Facades\Filament;
 use Filament\Pages\Page;

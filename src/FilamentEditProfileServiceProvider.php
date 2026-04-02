@@ -1,18 +1,18 @@
 <?php
 
-namespace Joaopaulolndev\FilamentEditProfile;
+namespace NoopStudios\FilamentEditProfile;
 
 use Filament\Auth\Http\Responses\Contracts\EmailChangeVerificationResponse as EmailChangeVerificationResponseContract;
-use Joaopaulolndev\FilamentEditProfile\Commands\FilamentEditProfileCommand;
-use Joaopaulolndev\FilamentEditProfile\Http\Responses\EmailChangeVerificationResponse;
-use Joaopaulolndev\FilamentEditProfile\Livewire\BrowserSessionsForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\CustomFieldsForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\DeleteAccountForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\EditPasswordForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\EditProfileForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\MultiFactorAuthentication;
-use Joaopaulolndev\FilamentEditProfile\Livewire\SanctumTokens;
-use Joaopaulolndev\FilamentEditProfile\Testing\TestsFilamentEditProfile;
+use NoopStudios\FilamentEditProfile\Commands\FilamentEditProfileCommand;
+use NoopStudios\FilamentEditProfile\Http\Responses\EmailChangeVerificationResponse;
+use NoopStudios\FilamentEditProfile\Livewire\BrowserSessionsForm;
+use NoopStudios\FilamentEditProfile\Livewire\CustomFieldsForm;
+use NoopStudios\FilamentEditProfile\Livewire\DeleteAccountForm;
+use NoopStudios\FilamentEditProfile\Livewire\EditPasswordForm;
+use NoopStudios\FilamentEditProfile\Livewire\EditProfileForm;
+use NoopStudios\FilamentEditProfile\Livewire\MultiFactorAuthentication;
+use NoopStudios\FilamentEditProfile\Livewire\SanctumTokens;
+use NoopStudios\FilamentEditProfile\Testing\TestsFilamentEditProfile;
 use Livewire\Features\SupportTesting\Testable;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -39,7 +39,7 @@ class FilamentEditProfileServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub('joaopaulolndev/filament-edit-profile');
+                    ->askToStarRepoOnGitHub('noopstudios/filament-edit-profile');
             });
 
         $configFileName = $package->shortName();
@@ -88,7 +88,7 @@ class FilamentEditProfileServiceProvider extends PackageServiceProvider
         // panel boots. Livewire update requests (POST /livewire/update) bypass
         // Filament panel middleware, so components registered in Plugin::boot()
         // are not available and Livewire throws ComponentNotFoundException.
-        // @see https://github.com/joaopaulolndev/filament-edit-profile/issues/134
+        // @see https://github.com/noopstudios/filament-edit-profile/issues/134
         $this->registerLivewireComponents();
 
         // Testing
@@ -108,7 +108,7 @@ class FilamentEditProfileServiceProvider extends PackageServiceProvider
 
     protected function getAssetPackageName(): ?string
     {
-        return 'Joaopaulolndev/filament-edit-profile';
+        return 'NoopStudios/filament-edit-profile';
     }
 
     /**

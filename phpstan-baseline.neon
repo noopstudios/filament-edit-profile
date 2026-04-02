@@ -19,7 +19,7 @@ parameters:
 			path: src/Http/Responses/EmailChangeVerificationResponse.php
 
 		-
-			message: '#^Access to an undefined property Joaopaulolndev\\FilamentEditProfile\\Livewire\\BaseProfileForm\:\:\$view\.$#'
+			message: '#^Access to an undefined property NoopStudios\\FilamentEditProfile\\Livewire\\BaseProfileForm\:\:\$view\.$#'
 			identifier: property.notFound
 			count: 1
 			path: src/Livewire/BaseProfileForm.php
@@ -37,7 +37,7 @@ parameters:
 			path: src/Livewire/BrowserSessionsForm.php
 
 		-
-			message: '#^Access to an undefined property Joaopaulolndev\\FilamentEditProfile\\Livewire\\CustomFieldsForm\:\:\$form\.$#'
+			message: '#^Access to an undefined property NoopStudios\\FilamentEditProfile\\Livewire\\CustomFieldsForm\:\:\$form\.$#'
 			identifier: property.notFound
 			count: 2
 			path: src/Livewire/CustomFieldsForm.php
@@ -55,13 +55,13 @@ parameters:
 			path: src/Livewire/DeleteAccountForm.php
 
 		-
-			message: '#^Access to an undefined property Joaopaulolndev\\FilamentEditProfile\\Livewire\\EditPasswordForm\:\:\$form\.$#'
+			message: '#^Access to an undefined property NoopStudios\\FilamentEditProfile\\Livewire\\EditPasswordForm\:\:\$form\.$#'
 			identifier: property.notFound
 			count: 3
 			path: src/Livewire/EditPasswordForm.php
 
 		-
-			message: '#^Access to an undefined property Joaopaulolndev\\FilamentEditProfile\\Livewire\\EditProfileForm\:\:\$form\.$#'
+			message: '#^Access to an undefined property NoopStudios\\FilamentEditProfile\\Livewire\\EditProfileForm\:\:\$form\.$#'
 			identifier: property.notFound
 			count: 2
 			path: src/Livewire/EditProfileForm.php
@@ -121,7 +121,7 @@ parameters:
 			path: src/Livewire/EditProfileForm.php
 
 		-
-			message: '#^Method Joaopaulolndev\\FilamentEditProfile\\Livewire\\EditProfileForm\:\:getEmailChangeVerificationSentNotification\(\) never returns null so it can be removed from the return type\.$#'
+			message: '#^Method NoopStudios\\FilamentEditProfile\\Livewire\\EditProfileForm\:\:getEmailChangeVerificationSentNotification\(\) never returns null so it can be removed from the return type\.$#'
 			identifier: return.unusedType
 			count: 1
 			path: src/Livewire/EditProfileForm.php

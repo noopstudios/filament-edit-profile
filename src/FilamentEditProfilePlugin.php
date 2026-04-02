@@ -1,6 +1,6 @@
 <?php
 
-namespace Joaopaulolndev\FilamentEditProfile;
+namespace NoopStudios\FilamentEditProfile;
 
 use BackedEnum;
 use Closure;
@@ -9,16 +9,16 @@ use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\Support\Concerns\EvaluatesClosures;
 use Illuminate\Contracts\Support\Htmlable;
-use Joaopaulolndev\FilamentEditProfile\Http\Middleware\SetUserLocale;
-use Joaopaulolndev\FilamentEditProfile\Http\Middleware\SetUserThemeColor;
-use Joaopaulolndev\FilamentEditProfile\Livewire\BrowserSessionsForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\CustomFieldsForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\DeleteAccountForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\EditPasswordForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\EditProfileForm;
-use Joaopaulolndev\FilamentEditProfile\Livewire\MultiFactorAuthentication;
-use Joaopaulolndev\FilamentEditProfile\Livewire\SanctumTokens;
-use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use NoopStudios\FilamentEditProfile\Http\Middleware\SetUserLocale;
+use NoopStudios\FilamentEditProfile\Http\Middleware\SetUserThemeColor;
+use NoopStudios\FilamentEditProfile\Livewire\BrowserSessionsForm;
+use NoopStudios\FilamentEditProfile\Livewire\CustomFieldsForm;
+use NoopStudios\FilamentEditProfile\Livewire\DeleteAccountForm;
+use NoopStudios\FilamentEditProfile\Livewire\EditPasswordForm;
+use NoopStudios\FilamentEditProfile\Livewire\EditProfileForm;
+use NoopStudios\FilamentEditProfile\Livewire\MultiFactorAuthentication;
+use NoopStudios\FilamentEditProfile\Livewire\SanctumTokens;
+use NoopStudios\FilamentEditProfile\Pages\EditProfilePage;
 
 class FilamentEditProfilePlugin implements Plugin
 {
