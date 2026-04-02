@@ -11,7 +11,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Component;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Support\Str;
@@ -50,13 +49,8 @@ class CustomFieldsForm extends BaseProfileForm
         );
 
         return $schema
-            ->components([
-                Section::make(__('filament-edit-profile::default.custom_fields'))
-                    ->aside()
-                    ->description(__('filament-edit-profile::default.custom_fields_description'))
-                    ->columns()
-                    ->schema($fields),
-            ])
+            ->components($fields)
+            ->columns()
             ->model($this->getUser())
             ->statePath('data');
     }

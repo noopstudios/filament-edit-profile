@@ -6,18 +6,18 @@ use Filament\Auth\Notifications\NoticeOfEmailChangeRequest;
 use Filament\Auth\Notifications\VerifyEmailChange;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification as FilamentNotification;
-use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Notification;
-use NoopStudios\FilamentEditProfile\Concerns\HasUser;
 use League\Uri\Components\Query;
+use NoopStudios\FilamentEditProfile\Concerns\HasUser;
+use Spatie\MediaLibrary\HasMedia;
 
 class EditProfileForm extends BaseProfileForm
 {
@@ -33,21 +33,18 @@ class EditProfileForm extends BaseProfileForm
 
     public function mount(): void
     {
-        $this->user = $this->getUser();
+        $plugin = filament('filament-edit-profile');
 
+        $this->user = $this->getUser();
         $this->userClass = get_class($this->user);
 
         $fields = [config('filament-edit-profile.name_column', 'name'), 'email'];
 
-        if (filament('filament-edit-profile')->getShouldShowAvatarForm()) {
-            $fields[] = config('filament-edit-profile.avatar_column', 'avatar_url');
-        }
-
-        if (filament('filament-edit-profile')->getShouldShowLocaleForm()) {
+        if ($plugin->getShouldShowLocaleForm()) {
             $fields[] = config('filament-edit-profile.locale_column', 'locale');
         }
 
-        if (filament('filament-edit-profile')->getShouldShowThemeColorForm()) {
+        if ($plugin->getShouldShowThemeColorForm()) {
             $fields[] = config('filament-edit-profile.theme_color_column', 'theme_color');
         }
 
@@ -56,41 +53,47 @@ class EditProfileForm extends BaseProfileForm
 
     public function form(Schema $schema): Schema
     {
+        $plugin = filament('filament-edit-profile');
+        $components = [];
+
+        if ($this->canShowAvatarUpload()) {
+            $components[] = SpatieMediaLibraryFileUpload::make('avatar')
+                ->model($this->user)
+                ->label(__('filament-edit-profile::default.avatar'))
+                ->collection($plugin->getAvatarCollection())
+                ->image()
+                ->maxFiles(1)
+                ->avatar()
+                ->imageEditor()
+                ->disk($plugin->getAvatarDisk())
+                ->visibility($plugin->getAvatarVisibility())
+                ->rules($plugin->getAvatarRules());
+        }
+
+        $components[] = TextInput::make(config('filament-edit-profile.name_column', 'name'))
+            ->label(__('filament-edit-profile::default.name'))
+            ->required();
+
+        $components[] = TextInput::make('email')
+            ->label(__('filament-edit-profile::default.email'))
+            ->email()
+            ->required()
+            ->hidden(! $plugin->getShouldShowEmailForm())
+            ->unique($this->userClass, ignorable: $this->user);
+
+        $components[] = Select::make('locale')
+            ->label(__('filament-edit-profile::default.locale'))
+            ->options($plugin->getOptionsLocaleForm())
+            ->rules($plugin->getLocaleRules())
+            ->hidden(! $plugin->getShouldShowLocaleForm());
+
+        $components[] = ColorPicker::make('theme_color')
+            ->label(__('filament-edit-profile::default.theme_color'))
+            ->rules($plugin->getThemeColorRules())
+            ->hidden(! $plugin->getShouldShowThemeColorForm());
+
         return $schema
-            ->components([
-                Section::make(__('filament-edit-profile::default.profile_information'))
-                    ->aside()
-                    ->description(__('filament-edit-profile::default.profile_information_description'))
-                    ->schema([
-                        FileUpload::make(config('filament-edit-profile.avatar_column', 'avatar_url'))
-                            ->label(__('filament-edit-profile::default.avatar'))
-                            ->avatar()
-                            ->imageEditor()
-                            ->disk(config('filament-edit-profile.disk', 'public'))
-                            ->visibility(config('filament-edit-profile.visibility', 'public'))
-                            ->directory(filament('filament-edit-profile')->getAvatarDirectory())
-                            ->rules(filament('filament-edit-profile')->getAvatarRules())
-                            ->hidden(! filament('filament-edit-profile')->getShouldShowAvatarForm()),
-                        TextInput::make(config('filament-edit-profile.name_column', 'name'))
-                            ->label(__('filament-edit-profile::default.name'))
-                            ->required(),
-                        TextInput::make('email')
-                            ->label(__('filament-edit-profile::default.email'))
-                            ->email()
-                            ->required()
-                            ->hidden(! filament('filament-edit-profile')->getShouldShowEmailForm())
-                            ->unique($this->userClass, ignorable: $this->user),
-                        Select::make('locale')
-                            ->label(__('filament-edit-profile::default.locale'))
-                            ->options(filament('filament-edit-profile')->getOptionsLocaleForm())
-                            ->rules(filament('filament-edit-profile')->getLocaleRules())
-                            ->hidden(! filament('filament-edit-profile')->getShouldShowLocaleForm()),
-                        ColorPicker::make('theme_color')
-                            ->label(__('filament-edit-profile::default.theme_color'))
-                            ->rules(filament('filament-edit-profile')->getThemeColorRules())
-                            ->hidden(! filament('filament-edit-profile')->getShouldShowThemeColorForm()),
-                    ]),
-            ])
+            ->components($components)
             ->statePath('data');
     }
 
@@ -107,6 +110,7 @@ class EditProfileForm extends BaseProfileForm
 
         try {
             $data = $this->form->getState();
+            unset($data['avatar']);
 
             if (Filament::hasEmailChangeVerification() && array_key_exists('email', $data)) {
                 $this->sendEmailChangeVerification($this->user, $data['email']);
@@ -143,6 +147,11 @@ class EditProfileForm extends BaseProfileForm
                 redirect(request()->header('referer'));
             }
         }
+    }
+
+    protected function canShowAvatarUpload(): bool
+    {
+        return filament('filament-edit-profile')->getShouldShowAvatarForm() && ($this->user instanceof HasMedia);
     }
 
     private function sendEmailChangeVerification(Authenticatable & Model $user, string $newEmail): void

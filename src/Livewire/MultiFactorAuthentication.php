@@ -22,12 +22,7 @@ class MultiFactorAuthentication extends BaseProfileForm
     {
         return $schema
             ->components([
-                Section::make(__('filament-edit-profile::default.mfa_section_title'))
-                    ->description(__('filament-edit-profile::default.mfa_section_description'))
-                    ->aside()
-                    ->schema([
-                        $this->getMultiFactorAuthenticationContentComponent(),
-                    ]),
+                $this->getMultiFactorAuthenticationContentComponent(),
             ]);
     }
 

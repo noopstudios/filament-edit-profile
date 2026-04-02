@@ -392,6 +392,21 @@ class FilamentEditProfilePlugin implements Plugin
         return $this->avatarRules;
     }
 
+    public function getAvatarDisk(): string
+    {
+        return config('filament-edit-profile.disk', 'public');
+    }
+
+    public function getAvatarVisibility(): string
+    {
+        return config('filament-edit-profile.visibility', 'public');
+    }
+
+    public function getAvatarCollection(): string
+    {
+        return config('filament-edit-profile.media.collection', 'avatar');
+    }
+
     public function getLocaleRules(): array | string
     {
         return $this->localeRules;

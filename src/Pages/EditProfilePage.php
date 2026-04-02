@@ -3,79 +3,153 @@
 namespace NoopStudios\FilamentEditProfile\Pages;
 
 use Filament\Facades\Filament;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Pages\Page;
 use Filament\Panel;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\View;
+use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
+use NoopStudios\FilamentEditProfile\FilamentEditProfilePlugin;
+use NoopStudios\FilamentEditProfile\Livewire\BrowserSessionsForm;
+use NoopStudios\FilamentEditProfile\Livewire\CustomFieldsForm;
+use NoopStudios\FilamentEditProfile\Livewire\DeleteAccountForm;
+use NoopStudios\FilamentEditProfile\Livewire\EditPasswordForm;
+use NoopStudios\FilamentEditProfile\Livewire\EditProfileForm;
+use NoopStudios\FilamentEditProfile\Livewire\MultiFactorAuthentication;
+use NoopStudios\FilamentEditProfile\Livewire\SanctumTokens;
 
 class EditProfilePage extends Page
 {
+    use InteractsWithForms;
+
     protected string $view = 'filament-edit-profile::filament.pages.edit-profile-page';
 
     protected static ?string $slug = 'edit-profile';
 
-    public static function getSlug(?Panel $panel = null): string
+    public ?array $data = [];
+
+    public function mount(): void
+    {
+        $this->form->fill();
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                $this->buildTabs(),
+            ])
+            ->statePath('data');
+    }
+
+    protected function buildTabs(): Tabs
+    {
+        $definitions = [
+            EditProfileForm::class => [
+                'label' => __('filament-edit-profile::default.profile_information'),
+                'icon' => 'heroicon-o-user',
+            ],
+            EditPasswordForm::class => [
+                'label' => __('filament-edit-profile::default.password'),
+                'icon' => 'heroicon-o-key',
+            ],
+            CustomFieldsForm::class => [
+                'label' => __('filament-edit-profile::default.custom_fields'),
+                'icon' => 'heroicon-o-document-text',
+            ],
+            BrowserSessionsForm::class => [
+                'label' => __('filament-edit-profile::default.browser_section_title'),
+                'icon' => 'heroicon-o-computer-desktop',
+            ],
+            MultiFactorAuthentication::class => [
+                'label' => __('filament-edit-profile::default.mfa_section_title'),
+                'icon' => 'heroicon-o-shield-check',
+            ],
+            SanctumTokens::class => [
+                'label' => __('filament-edit-profile::default.api_tokens_title'),
+                'icon' => 'heroicon-o-key',
+            ],
+            DeleteAccountForm::class => [
+                'label' => __('filament-edit-profile::default.delete_account'),
+                'icon' => 'heroicon-o-trash',
+            ],
+        ];
+
+        $tabs = [];
+
+        foreach ($this->getRegisteredCustomProfileComponents() as $alias => $componentClass) {
+            $definition = $definitions[$componentClass] ?? [
+                'label' => Str::of($alias)->replace('_', ' ')->headline()->toString(),
+                'icon' => null,
+            ];
+
+            $tabs[] = Tab::make($definition['label'])
+                ->icon($definition['icon'])
+                ->schema([
+                    View::make('filament-edit-profile::livewire-component-view')
+                        ->viewData(['component' => $alias]),
+                ]);
+        }
+
+        return Tabs::make('profile_tabs')
+            ->tabs($tabs);
+    }
+
+    protected static function getPlugin(?Panel $panel = null): ?FilamentEditProfilePlugin
     {
         if ($panel === null) {
             $panel = Filament::getCurrentOrDefaultPanel();
         }
 
-        $plugin = $panel?->getPlugin('filament-edit-profile');
+        return $panel?->getPlugin('filament-edit-profile');
+    }
 
-        $slug = $plugin?->getSlug();
+    public static function getSlug(?Panel $panel = null): string
+    {
+        $slug = static::getPlugin($panel)?->getSlug();
 
         return $slug ? $slug : self::$slug;
     }
 
     public static function shouldRegisterNavigation(): bool
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getShouldRegisterNavigation();
+        return static::getPlugin()?->getShouldRegisterNavigation() ?? true;
     }
 
     public static function getNavigationSort(): ?int
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getSort();
+        return static::getPlugin()?->getSort();
     }
 
     public static function getNavigationIcon(): ?string
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getIcon();
+        return static::getPlugin()?->getIcon();
     }
 
     public static function getNavigationGroup(): ?string
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getNavigationGroup();
+        return static::getPlugin()?->getNavigationGroup();
     }
 
     public function getTitle(): string
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getTitle() ?? __('filament-edit-profile::default.title');
+        return static::getPlugin()?->getTitle() ?? __('filament-edit-profile::default.title');
     }
 
     public static function getNavigationLabel(): string
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getNavigationLabel() ?? __('filament-edit-profile::default.title');
+        return static::getPlugin()?->getNavigationLabel() ?? __('filament-edit-profile::default.title');
     }
 
     public static function canAccess(): bool
     {
-        $plugin = Filament::getCurrentOrDefaultPanel()?->getPlugin('filament-edit-profile');
-
-        return $plugin->getCanAccess();
+        return static::getPlugin()?->getCanAccess() ?? true;
     }
 
     public function getRegisteredCustomProfileComponents(): array
     {
-        return filament('filament-edit-profile')->getRegisteredCustomProfileComponents();
+        return static::getPlugin()?->getRegisteredCustomProfileComponents() ?? [];
     }
 }
