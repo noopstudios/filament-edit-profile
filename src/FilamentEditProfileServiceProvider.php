@@ -3,6 +3,8 @@
 namespace NoopStudios\FilamentEditProfile;
 
 use Filament\Auth\Http\Responses\Contracts\EmailChangeVerificationResponse as EmailChangeVerificationResponseContract;
+use Livewire\Features\SupportTesting\Testable;
+use Livewire\Livewire;
 use NoopStudios\FilamentEditProfile\Commands\FilamentEditProfileCommand;
 use NoopStudios\FilamentEditProfile\Http\Responses\EmailChangeVerificationResponse;
 use NoopStudios\FilamentEditProfile\Livewire\BrowserSessionsForm;
@@ -13,8 +15,6 @@ use NoopStudios\FilamentEditProfile\Livewire\EditProfileForm;
 use NoopStudios\FilamentEditProfile\Livewire\MultiFactorAuthentication;
 use NoopStudios\FilamentEditProfile\Livewire\SanctumTokens;
 use NoopStudios\FilamentEditProfile\Testing\TestsFilamentEditProfile;
-use Livewire\Features\SupportTesting\Testable;
-use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
